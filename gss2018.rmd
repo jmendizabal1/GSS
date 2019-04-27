@@ -1,6 +1,6 @@
 ---
 title: "General Social Survey"
-author: "Your Name"
+author: "Jaime Mendizabal"
 date: "Year 2019"
 output: 
   html_document:
@@ -28,15 +28,10 @@ mydata4 <- filter(mydata3,CAPPUN=="FAVOR"|CAPPUN=="OPPOSE",VOTE12=="Voted"|VOTE1
 levels(mydata4$VOTE12)[1] <- "voted12"
 levels(mydata4$VOTE12)[2] <- "no in 12"
 
+mydata5 <- filter(mydata4, CAPPUN=="FAVOR" | CAPPUN=="OPPOSE")
+
 ```
 
-
-```{r}
-barchartGC(~VOTE16+VOTE12, data=mydata4, type = "percent") 
-chisqtestGC(~VOTE16+VOTE12, data=mydata4)
-votetab=xtabs(~VOTE16+VOTE12, data=mydata4)
-fisher.test(votetab)
-```
 
 # Introduction Question 1
 
@@ -44,10 +39,15 @@ fisher.test(votetab)
 
 This data is from the 2018 General Social Survey. The first blocks of R-code has selected down a subset of the data to just 15 variables. It has further removed unwanted factor levels in much of the data. Examine that code to see what it is doing. First explain what you make out of comparing how people voted in 2012 with 2016.
 
+How are the "voted in 2016" and "voted in 2012" related?  
+$H_0:$ voting in 2016 and 2012 are unrelated
+alternative hyposthesis: is voting in 2016 directly related to the way people voted in 2012.
 
 ## Methods
 
 <!--Decide on your methods:  use "variable analysis" or other appropriate descriptors.  Make sure to choose at least one graphical method and at least one numerical method.!-->
+
+Use categorial variables, and a Chi-squared tests to test the hypothesis that voting in 2016 is/is not independant of voting in 2012.
 
 ##Results
 
@@ -55,17 +55,46 @@ This data is from the 2018 General Social Survey. The first blocks of R-code has
 
 ### Descriptive Results
 
+we use a barchart to show the voting trends between 2012 and 2016.
+
+
+
 #### Graphical Descriptive Results
 
 <!--Graphical results here.  Make sure to show your code.  Provide appropriate labels for axes, giving units if possible, and provide a good title for the graph, too.  Use the graphical results to describe the patterns if any that exist in the data as focused toward the research question!-->
+
+
+```{r}
+barchartGC(~VOTE16+VOTE12, data=mydata4, type = "percent" ,xlab= 'voted in 2016' ) 
+
+```
+
 
 #### Numerical Descriptive Results
 
 <!--Numerical results go here. Use the numerical results to describe the patterns if any that exist in the data as focused toward the research question!-->
 
+numerical summary is a cross tabulation: 
+```{r}
+xtabs(~VOTE16+VOTE12, data=mydata4)
+
+```
+
+
+
 ### Inferential Results
 
 <!--State hypothesis clearly.  Make sure your discussion of the inferential test covers all the aspects that the test output produces, such as test statistic, p-value etc.  Make a decision about the null hypothesis, explain the assumptions on which the selected test/procedure was based, and why the chosen procedure satisfys the assumptions and is appropriate to answer the research question!-->
+
+```{r}
+chisqtestGC(~VOTE16+VOTE12, data=mydata4)
+votetab=xtabs(~VOTE16+VOTE12, data=mydata4)
+fisher.test(votetab)
+```
+
+# Discussion and Conclusion
+
+The hypothesis was that voting in 2012 is related voting in 2016. we used a chi-square test of independance p value is 0, meaning the null hypothesis is related. we reject the null hypothesis. we have evidence that voting in 2012 is related to voting in 2016 and if you did not vote in 2012 you likely did not vote in 2016.
 
 # Introduction Question 2
 
@@ -73,9 +102,17 @@ This data is from the 2018 General Social Survey. The first blocks of R-code has
 
 Now answer Is belief in the bigbang theory (BIGBANG) independent of belief in the afterlife (POSTLIFE)
 
+
+How are the "Big Bang Theory" and "Belief in the after life" related?  
+$H_0:$ if people believe in the big bang theory also believe in the after life
+alternative hyposthesis: there is no relation between people who believe in the big bang theory and people who believe in an after life
+
+
 ## Methods
 
 <!--Decide on your methods:  use "variable analysis" or other appropriate descriptors.  Make sure to choose at least one graphical method and at least one numerical method.!-->
+
+Use categorial variables, and a Chi-squared tests to test the hypothesis that the belief in the big bang theory is/is not independant of the belief in an afterlife.
 
 ##Results
 
@@ -83,17 +120,43 @@ Now answer Is belief in the bigbang theory (BIGBANG) independent of belief in th
 
 ### Descriptive Results
 
+we use a barchart to show the belief in the big bang theory and the afterlife.
+
 #### Graphical Descriptive Results
 
 <!--Graphical results here.  Make sure to show your code.  Provide appropriate labels for axes, giving units if possible, and provide a good title for the graph, too.  Use the graphical results to describe the patterns if any that exist in the data as focused toward the research question!-->
+
+```{r}
+barchartGC(~BIGBANG+POSTLIFE, data=mydata3, type = "percent" ,xlab= 'BELEIVE IN POSTLIFE', main= 'BELIEVE IN BIGBANG') 
+```
+
+
 
 #### Numerical Descriptive Results
 
 <!--Numerical results go here. Use the numerical results to describe the patterns if any that exist in the data as focused toward the research question!-->
 
+
+numerical summary is a cross tabulation: 
+```{r}
+xtabs(~BIGBANG+POSTLIFE, data=mydata3)
+
+```
+
 ### Inferential Results
 
 <!--State hypothesis clearly.  Make sure your discussion of the inferential test covers all the aspects that the test output produces, such as test statistic, p-value etc.  Make a decision about the null hypothesis, explain the assumptions on which the selected test/procedure was based, and why the chosen procedure satisfys the assumptions and is appropriate to answer the research question!-->
+
+```{r}
+chisqtestGC(~BIGBANG+POSTLIFE, data=mydata3)
+bangtab=xtabs(~BIGBANG+POSTLIFE, data=mydata3)
+fisher.test(bangtab)
+```
+
+# Discussion and Conclusion
+
+
+The hypothesis was that the belief in the big bang theory is related to the belief in the afterlife. we used a chi-square test of independance, p value is 0, meaning the null hypothesis is related. we reject null hypothesis since we have evidence that the belief in the postlife is related to the belief in the big bang theory and if you do not believe in the after life you likely did not believe in the big bang theory.
 
 # Introduction Question 3
 
@@ -101,9 +164,15 @@ Now answer Is belief in the bigbang theory (BIGBANG) independent of belief in th
 
 This time compare the opinion on death penalty (CAPPUN) with opinion on courts (COURTS).
 
+do people's view on courts relate to their view on the death penalty?  
+$H_0:$ if people believe in the courts, they also believe in the death penalty
+alternative hyposthesis: there is no relation between peoples view on courts and people who believe in the death penalty
+
 ## Methods
 
 <!--Decide on your methods:  use "variable analysis" or other appropriate descriptors.  Make sure to choose at least one graphical method and at least one numerical method.!-->
+
+Use categorial variables, and a Chi-squared tests to test the hypothesis that the belief in the big bang theory is/is not independant of the belief in an afterlife.
 
 ##Results
 
@@ -111,20 +180,41 @@ This time compare the opinion on death penalty (CAPPUN) with opinion on courts (
 
 ### Descriptive Results
 
+
+we use a barchart to show the view on courts and the view on the death penalty
+
 #### Graphical Descriptive Results
 
 <!--Graphical results here.  Make sure to show your code.  Provide appropriate labels for axes, giving units if possible, and provide a good title for the graph, too.  Use the graphical results to describe the patterns if any that exist in the data as focused toward the research question!-->
+
+```{r}
+barchartGC(~CAPPUN+COURTS, data=mydata5, type = "percent" ,xlab= 'view on CAPPUN', main= 'view on COURTS') 
+```
 
 #### Numerical Descriptive Results
 
 <!--Numerical results go here. Use the numerical results to describe the patterns if any that exist in the data as focused toward the research question!-->
 
+
+
+numerical summary is a cross tabulation: 
+```{r}
+xtabs(~CAPPUN+COURTS, data=mydata5)
+
+```
+
 ### Inferential Results
 
 <!--State hypothesis clearly.  Make sure your discussion of the inferential test covers all the aspects that the test output produces, such as test statistic, p-value etc.  Make a decision about the null hypothesis, explain the assumptions on which the selected test/procedure was based, and why the chosen procedure satisfys the assumptions and is appropriate to answer the research question!-->
 
+```{r}
+chisqtestGC(~CAPPUN+COURTS, data=mydata5)
+cappuntable=xtabs(~CAPPUN+COURTS, data=mydata5)
+fisher.test(cappuntable)
+```
 
 # Discussion and Conclusion
 
 <!--Discussion and conclusion here.  If you found a relationship be sure to consider whether the relationship occurs because one of the variavbles causes the other, or whether they perhasps are related for some other reason.  Watch the chapter 6 videos from the GeorgeTown videos collection.!-->
 
+The hypothesis was that the belief in the death penalty is related to the belief in the court system. we used a chi-square test of independance, p value is 0, meaning the null hypothesis is related. we accept null hypothesis since we have evidence that the belief in the belief in the death penalty is related to the belief in the court system and if you do not believe in the court system you likely did not believe in the death penalty.
